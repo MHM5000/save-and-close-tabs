@@ -3,6 +3,10 @@
   "displayName": "Save & Close Tabs",
   "description": "Saves and Closes All the tabs that are open",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MHM5000/save-and-close-tabs"
+  },
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -14,8 +18,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "save-and-close-tabs.helloWorld",
-        "title": "Hello World"
+        "command": "extension.saveAllWithUUID",
+        "title": "Save all with UUID"
       }
     ]
   },
@@ -34,16 +38,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.94.0",
     "@types/mocha": "^10.0.9",
     "@types/node": "20.x",
+    "@types/uuid": "^10.0.0",
+    "@types/vscode": "^1.94.0",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.7.0",
-    "eslint": "^9.13.0",
-    "esbuild": "^0.24.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.6.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.13.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
   }
 }

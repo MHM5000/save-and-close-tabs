@@ -1,26 +1,38 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	let disposable = vscode.commands.registerCommand('extension.saveAllWithUUID', async () => {
+		const openTextEditors = vscode.window.visibleTextEditors;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "save-and-close-tabs" is now active!');
+		if (openTextEditors.length === 0) {
+			vscode.window.showInformationMessage('No open files to save.');
+			return;
+		}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('save-and-close-tabs.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Save &amp; Close Tabs!');
+		const folder = await vscode.window.showOpenDialog({ canSelectFolders: true, canSelectMany: false });
+
+		if (!folder || folder.length === 0) {
+			vscode.window.showErrorMessage('You need to select a folder to save files.');
+			return;
+		}
+
+		const folderPath = folder[0].fsPath;
+
+		openTextEditors.forEach((editor) => {
+			const doc = editor.document;
+			const content = doc.getText();
+			const uuid = uuidv4();
+			const filePath = path.join(folderPath, `${uuid}.txt`); // Add extension based on file type if needed
+
+			fs.writeFileSync(filePath, content, 'utf8');
+			vscode.window.showInformationMessage(`File saved as ${uuid}.txt`);
+		});
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
