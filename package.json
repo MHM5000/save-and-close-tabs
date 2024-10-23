@@ -19,7 +19,7 @@
     "commands": [
       {
         "command": "extension.saveAllWithUUID",
-        "title": "Save all with UUID"
+        "title": "Save All with UUID"
       }
     ]
   },
