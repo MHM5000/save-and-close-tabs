@@ -28,16 +28,16 @@ export function activate(context: vscode.ExtensionContext) {
 			if (doc.isUntitled) {
 				// Generate a UUID-based filename
 				const uuid = uuidv4();
-				const fileExtension = doc.languageId ? `.${doc.languageId}` : '.txt'; // Use language extension or .txt by default
+				const fileExtension = doc.languageId ? `.${doc.languageId}` : '.txt'; // Use language extension or .txt as default
 				const filePath = path.join(folderPath, `${uuid}${fileExtension}`);
 
 				// Write the content of the document to disk
 				fs.writeFileSync(filePath, doc.getText(), 'utf8');
 				vscode.window.showInformationMessage(`Unsaved file saved as ${uuid}${fileExtension}`);
 
-				// Close the editor after saving to disk
+				// Close the editor without saving (discard unsaved changes)
 				const editor = await vscode.window.showTextDocument(doc);
-				await vscode.commands.executeCommand('workbench.action.closeActiveEditor', editor);
+				await vscode.commands.executeCommand('workbench.action.revertAndCloseActiveEditor', editor);
 			} else if (doc.isDirty) {
 				// If the document is already saved but has unsaved changes, save it directly
 				await doc.save();
